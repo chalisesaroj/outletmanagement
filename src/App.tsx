@@ -25,7 +25,15 @@ import { Sale } from './types';
 
 export const AppContent: React.FC = () => {
   const { settings } = useSettings();
-  const [activeTab, setActiveTab] = useState<ActiveTab>('dashboard');
+  const [activeTab, setActiveTab] = useState<ActiveTab>(() => {
+    const params = new URLSearchParams(window.location.search);
+    const t = params.get('tab') as ActiveTab;
+    const validTabs: ActiveTab[] = [
+      'dashboard', 'pos', 'products', 'inventory', 'purchases',
+      'customers', 'suppliers', 'warranties', 'finance', 'reports', 'settings'
+    ];
+    return validTabs.includes(t) ? t : 'dashboard';
+  });
   const [isSidebarOpen, setIsSidebarOpen] = useState(false);
 
   // Invoice Print Modal State
